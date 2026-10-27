@@ -1,0 +1,22 @@
+{
+    "name": "Platformer.Editor",
+    "rootNamespace": "Platformer.EditorTools",
+    "references": [
+        "Platformer.Runtime",
+        "Unity.InputSystem",
+        "Unity.Cinemachine",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.2D.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
