@@ -119,6 +119,8 @@ namespace Platformer.Player
         public string GroundSource { get; private set; } = "none";
         /// <summary>Velocity of the moving platform the body stands on (zero otherwise).</summary>
         public Vector2 CarryVelocity => carryVelocity;
+        /// <summary>Moving platform the body stands on (null otherwise).</summary>
+        public MovingPlatform Carrier { get; private set; }
         public float CoyoteTimeRemaining => coyoteTimer;
         public float JumpBufferRemaining => jumpBufferTimer;
         public int Facing => facing;
@@ -262,6 +264,7 @@ namespace Platformer.Player
             jumpBufferTimer = 0f;
             isJumping = false;
             groundCollider = null;
+            Carrier = null;
             carryVelocity = Vector2.zero;
             appliedCarryX = 0f;
             IsGrounded = false;
@@ -292,9 +295,13 @@ namespace Platformer.Player
 
             groundCollider = IsGrounded ? (probed != null ? probed : touched) : null;
             carryVelocity = Vector2.zero;
+            Carrier = null;
             if (groundCollider != null && groundCollider.attachedRigidbody != null
                 && groundCollider.attachedRigidbody.TryGetComponent<MovingPlatform>(out var platform))
+            {
+                Carrier = platform;
                 carryVelocity = platform.Velocity;
+            }
 
             if (IsGrounded)
             {
@@ -344,6 +351,7 @@ namespace Platformer.Player
                 IsGrounded = false;
                 coyoteTimer = 0f;
                 groundCollider = null;
+                Carrier = null;
                 carryVelocity = Vector2.zero;
                 onDroppedThrough.Invoke();
                 return false;

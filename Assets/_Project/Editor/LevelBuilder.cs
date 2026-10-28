@@ -1,4 +1,5 @@
 using System.Linq;
+using Platformer.Cameras;
 using Platformer.Levels;
 using Platformer.Player;
 using Unity.Cinemachine;
@@ -171,7 +172,8 @@ namespace Platformer.EditorTools
 
             var bounds = CreateCameraBounds(ground);
             if (player != null)
-                CreateCameras(player.transform, bounds);
+                CreateCameras(player.TryGetComponent<PlayerCameraTarget>(out var follow) && follow.Target != null
+                    ? follow.Target : player.transform, bounds);
 
             EditorSceneManager.SaveScene(scene, scenePath);
             AddToBuildSettings(scenePath, firstInBuild);
@@ -284,8 +286,9 @@ namespace Platformer.EditorTools
             pixelPerfect.refResolutionX = ReferenceWidth;
             pixelPerfect.refResolutionY = ReferenceHeight;
             pixelPerfect.gridSnapping = PixelPerfectCamera.GridSnapping.UpscaleRenderTexture;
-            // Crop both axes so the 320x180 image is always scaled by an integer factor.
-            pixelPerfect.cropFrame = PixelPerfectCamera.CropFrame.Windowbox;
+            // No crop: the image is scaled by the largest integer factor that keeps at least
+            // 320x180 visible, and the rest of the screen shows more of the level instead of bars.
+            pixelPerfect.cropFrame = PixelPerfectCamera.CropFrame.None;
 
             var vcamObject = new GameObject("CM Player Camera");
             vcamObject.transform.position = cameraObject.transform.position;
@@ -299,12 +302,18 @@ namespace Platformer.EditorTools
             var composer = vcamObject.AddComponent<CinemachinePositionComposer>();
             composer.CameraDistance = 10f;
             composer.TargetOffset = new Vector3(0f, 1f, 0f); // aim at the body, not the feet
-            composer.Damping = new Vector3(0.4f, 0.6f, 0f);
+            // No vertical damping: PlayerCameraTarget already eases the height.
+            composer.Damping = new Vector3(0.4f, 0f, 0f);
 
             var confiner = vcamObject.AddComponent<CinemachineConfiner2D>();
             confiner.BoundingShape2D = bounds;
+            // Cinemachine's defaults slow the camera down within 5 u of the bounds, which at
+            // 320x180 reads as a crawl of single pixels whenever it settles near the floor.
+            confiner.SlowingDistance = 0f;
+            confiner.Damping = 0f;
 
             vcamObject.AddComponent<CinemachinePixelPerfect>();
+            vcamObject.AddComponent<CameraPixelLock>();
         }
 
         private static void AddToBuildSettings(string path, bool first)

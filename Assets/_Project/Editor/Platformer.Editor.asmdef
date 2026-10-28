@@ -4,6 +4,7 @@
     "references": [
         "Platformer.Runtime",
         "Unity.InputSystem",
+        "Unity.2D.Aseprite.Editor",
         "Unity.Cinemachine",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Universal.2D.Runtime"
