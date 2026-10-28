@@ -277,7 +277,8 @@ namespace Platformer.EditorTools
             camera.orthographic = true;
             camera.orthographicSize = OrthographicSize;
             camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = new Color32(24, 20, 28, 255);
+            // Light sky: the art uses dark outlines, which disappear on a dark background.
+            camera.backgroundColor = new Color32(180, 196, 212, 255);
             cameraObject.AddComponent<UniversalAdditionalCameraData>();
             cameraObject.AddComponent<CinemachineBrain>();
 

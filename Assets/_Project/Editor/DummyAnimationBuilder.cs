@@ -46,13 +46,13 @@ namespace Platformer.EditorTools
 
         // State names match PlayerController.State. Last = -1 means the file's last frame.
         // Air poses are drawn in place: physics moves the body. Jump and Fall play once and hold
-        // their last pose; Dummy Fall ends with the landing, so only its two falling poses are used.
+        // their last pose until the state changes.
         private static readonly ClipSpec[] Clips =
         {
             new ClipSpec("Idle", "Dummy Idle", 0, -1, loop: true, snapToFeet: false),
             new ClipSpec("Run", "Dummy Walk", 0, -1, loop: true, snapToFeet: false),
             new ClipSpec("Jump", "Dummy Jump", 0, -1, loop: false, snapToFeet: false),
-            new ClipSpec("Fall", "Dummy Fall", 0, 1, loop: false, snapToFeet: false),
+            new ClipSpec("Fall", "Dummy Fall", 0, -1, loop: false, snapToFeet: false),
         };
 
         [MenuItem("Platformer/Build Dummy Animations")]

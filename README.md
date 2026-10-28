@@ -82,7 +82,7 @@ Level design notes for the default tuning: the full jump reaches 3.5 tiles up (3
 3. The 2D Aseprite Importer turns it into sprites and animation clips. Importer settings: PPU 16, pivot bottom-center, Point filter, no compression.
 4. Hook animations to `PlayerController` events (`On State Changed`, `On Jumped`, `On Landed`, `On Dropped Through`). `PlayerAnimator` does the common case: it plays the Animator state named after the controller state (`Idle`, `Run`, `Jump`, `Fall`).
 
-The player uses the **Dummy** character in `Assets/Characters/Dummy` (`Dummy Idle`, `Dummy Walk`, `Dummy Jump`, `Dummy Fall`). **Platformer > Build Dummy Animations** sets up its importers and writes the clips and `Dummy.controller`; *Build Player Prefab* uses them (and the placeholder if the folder is missing). Air poses are drawn in place (the controller moves the body): `Jump` and `Fall` play once and hold their last frame; `Fall` uses the first two frames of `Dummy Fall` (the last two are a landing). Which frames go into each state is the `Clips` table in `DummyAnimationBuilder`.
+The player uses the **Dummy** character in `Assets/Characters/Dummy` (`Dummy Idle`, `Dummy Walk`, `Dummy Jump`, `Dummy Fall`). **Platformer > Build Dummy Animations** sets up its importers and writes the clips and `Dummy.controller`; *Build Player Prefab* uses them (and the placeholder if the folder is missing). Air poses are drawn in place (the controller moves the body): `Jump` and `Fall` play once and hold their last frame. Which frames go into each state is the `Clips` table in `DummyAnimationBuilder`.
 
 ## Project layout
 
